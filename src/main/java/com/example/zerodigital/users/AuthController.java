@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +16,7 @@ import shared.CustomizedResponse;
 
 import java.util.Collections;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class AuthController {
 
@@ -36,8 +38,9 @@ public class AuthController {
                     new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
             );
 
-            UserDetails userDetails = userService.loadUserByUsername(user.getEmail());
-            String jwt = jwtUtil.generateToken(userDetails);
+            User fullUser = userService.getUserByEmail(user.getEmail());
+            String jwt = jwtUtil.generateToken(fullUser);
+            System.out.println("JWT: " + jwt);
 
             var response = new CustomizedResponse("Login successful", Collections.singletonList(jwt));
             return new ResponseEntity(response,HttpStatus.OK);

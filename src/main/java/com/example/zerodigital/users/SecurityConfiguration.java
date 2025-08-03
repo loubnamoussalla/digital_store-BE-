@@ -25,12 +25,14 @@ public class SecurityConfiguration {
     private AccessDeniedHandle accessDeniedHandle;
 
 
+    @Autowired
+    private EncyptPassword encyptPassword;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtRequestFilter jwtFilter) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth", "/media/**").permitAll()
+                        .requestMatchers("/auth", "/media/**","users/register").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex
@@ -59,7 +61,7 @@ public AuthenticationManager authenticationManager(HttpSecurity http) throws Exc
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userService);
-        provider.setPasswordEncoder(userService.passwordEncoder());
+        provider.setPasswordEncoder(encyptPassword.passwordEncoder());
         return provider;
     }
 }

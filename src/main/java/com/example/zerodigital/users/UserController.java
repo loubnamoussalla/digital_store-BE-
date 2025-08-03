@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -28,28 +29,26 @@ public class UserController {
         // Check if user with email already exists
         User ifExisted = userService.getUserByEmail(user.getEmail());
         if (ifExisted != null) {
-            var response = new CustomizedResponse("User already exists with email", Collections.singletonList(user.getEmail()));
+            var response = new CustomizedResponse("User with this email is already existed", null);
             return new ResponseEntity<>(response, HttpStatus.CONFLICT);
         }
 
         // Validate email format
         if (user.getEmail() == null || !user.getEmail().contains("@")) {
-            var response = new CustomizedResponse("Invalid email format", Collections.singletonList(user.getEmail()));
+            var response = new CustomizedResponse("Invalid email format", null);
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
         // Validate password length
         if (user.getPassword() == null || user.getPassword().length() < 6) {
-            var response = new CustomizedResponse("Error", Collections.singletonList("Password must be at least 6 characters"));
+            var response = new CustomizedResponse("Error Password must be at least 6 characters", null);
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
         // Validate firstName and lastName (alphabetical only)
         if (!user.getFirstName().matches("^[a-zA-Z]+$") || !user.getLastName().matches("^[a-zA-Z]+$")) {
             var response = new CustomizedResponse(
-                    "Name validation failed",
-                    Collections.singletonList("First and Last names must contain only letters (A–Z, a–z)")
-            );
+                    "First and Last names must contain only letters (A–Z, a–z)",null );
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
@@ -83,9 +82,7 @@ public class UserController {
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
-        var response = new CustomizedResponse(
-                "User with ID: " + id,
-                Collections.singletonList(user)
+        var response = new CustomizedResponse("User with ID: " + id,Collections.singletonList(user)
         );
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

@@ -37,11 +37,13 @@ public class MediaService {
         Media media = optionalMedia.get();
 
         media.setTitle(dto.getTitle());
+        media.setYear(dto.getYear());
+        media.setGenre(dto.getGenre());
         media.setPrice(dto.getPrice());
         media.setSynopsis(dto.getSynopsis());
         media.setType(dto.getType());
-        media.setSmallPoster(dto.getPosterSmall());
-        media.setPoster(dto.getPosterLarge());
+        media.setSmallPoster(dto.getSmallPoster());
+        media.setPoster(dto.getPoster());
         media.setRentPrice(dto.getRentPrice());
         media.setPurchasePrice(dto.getPurchasePrice());
         media.setFeatured(dto.getFeatured());

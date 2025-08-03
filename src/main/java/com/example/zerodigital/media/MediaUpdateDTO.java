@@ -1,8 +1,6 @@
 package com.example.zerodigital.media;
 import com.mongodb.lang.NonNull;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.*;
 
 public class MediaUpdateDTO {
 
@@ -11,6 +9,13 @@ public class MediaUpdateDTO {
 
     @NotBlank(message = "Type is required")
     private String type;
+
+    @NotNull
+    @Min(1800)
+    @Max(2028)     private int year;
+
+    @NotBlank(message = "Genre is required")
+    private String genre;
 
     @NotBlank(message = "Description is required")
     private String synopsis;
@@ -25,8 +30,24 @@ public class MediaUpdateDTO {
     private double purchasePrice;
 
     private String smallPoster;
-    private String posterLarge;
+    private String poster;
     private boolean featured;
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
 
     public String getTitle() {
         return title;
@@ -76,20 +97,20 @@ public class MediaUpdateDTO {
         this.purchasePrice = buyPrice;
     }
 
-    public String getPosterSmall() {
+    public String getSmallPoster() {
         return smallPoster;
     }
 
-    public void setPosterSmall(String posterSmall) {
+    public void setSmallPoster(String posterSmall) {
         this.smallPoster = posterSmall;
     }
 
-    public String getPosterLarge() {
-        return posterLarge;
+    public String getPoster() {
+        return poster;
     }
 
-    public void setPosterLarge(String posterLarge) {
-        this.posterLarge = posterLarge;
+    public void setPoster(String poster) {
+        this.poster = poster;
     }
 
     public boolean getFeatured() {

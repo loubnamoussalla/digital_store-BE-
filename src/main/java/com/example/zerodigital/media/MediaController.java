@@ -13,6 +13,7 @@ import shared.CustomizedResponse;
 import java.util.Collections;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/media")
 public class MediaController {

@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -28,21 +27,24 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                                     FilterChain chain) throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
 
-        String username = null;
+        String userId = null;
         String jwt = null;
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             jwt = authHeader.substring(7);
-            username = jwtUtil.extractUsername(jwt);
+            try {
+                userId = jwtUtil.extractUsername(jwt); // Still technically the "subject", which is the ID
+            } catch (Exception e) {
+                logger.warn("Unable to extract user ID from JWT", e);
+            }
         }
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userService.loadUserByUsername(username);
+        if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            User user = userService.getUserById(userId); // Use new method to fetch by ID
 
-            if (jwtUtil.validateToken(jwt, userDetails)) {
+            if (user != null && jwtUtil.validateToken(jwt, user.getEmail())) {
                 UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
+                        new UsernamePasswordAuthenticationToken(user.getEmail(), null, null);
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }

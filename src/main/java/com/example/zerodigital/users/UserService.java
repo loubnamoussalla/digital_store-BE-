@@ -19,14 +19,15 @@ public class UserService implements UserDetailsService {
 
 
 
-    private  BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    private  EncyptPassword encyptPassword;
 
 
 
 
     public User register(User user) {
 
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setPassword(encyptPassword.passwordEncoder().encode(user.getPassword()));
         return userRepository.save(user);
     }
     public List<User> getUsers()
@@ -50,12 +51,8 @@ public class UserService implements UserDetailsService {
 
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getEmail())
-                .password(user.getPassword()) // already encrypted
+                .password(user.getPassword())
                 .build();
-    }
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 
 }
