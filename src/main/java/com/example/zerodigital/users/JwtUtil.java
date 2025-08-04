@@ -18,7 +18,7 @@ public class JwtUtil {
                 .setSubject(user.getId().toString())
 //                .claim("id", user.getId())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 2))
                 .signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -32,13 +32,9 @@ public class JwtUtil {
                 .getSubject();
     }
 
-    public boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return username.equals(userDetails.getUsername());
-    }
+
     public boolean validateToken(String token, String email) {
-        final String extractedEmail = extractUsername(token); // now returns userId
-        // Optionally, decode again to fetch email or skip this if you're trusting the frontend/user context
+        final String extractedEmail = extractUsername(token);
         return !isTokenExpired(token);
     }
 

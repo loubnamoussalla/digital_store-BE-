@@ -24,7 +24,7 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private UserService  userService;
+    private UserService userService;
     @Autowired
     private JwtUtil jwtUtil;
 
@@ -40,10 +40,9 @@ public class AuthController {
 
             User fullUser = userService.getUserByEmail(user.getEmail());
             String jwt = jwtUtil.generateToken(fullUser);
-            System.out.println("JWT: " + jwt);
 
             var response = new CustomizedResponse("Login successful", Collections.singletonList(jwt));
-            return new ResponseEntity(response,HttpStatus.OK);
+            return new ResponseEntity(response, HttpStatus.OK);
         } catch (BadCredentialsException ex) {
             return new ResponseEntity<>(
                     new CustomizedResponse("Invalid email/password", null),

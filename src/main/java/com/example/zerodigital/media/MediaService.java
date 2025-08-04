@@ -20,15 +20,19 @@ public class MediaService {
     public List<Media> getByType(String type) {
         return mediaRepository.findByType(type.toLowerCase());
     }
+
     public List<Media> searchByTitle(String title) {
         return mediaRepository.findByTitleContainingIgnoreCase(title);
     }
+
     public List<Media> getFeaturedByType(String type) {
         return mediaRepository.findByTypeAndFeaturedTrue(type.toLowerCase());
     }
+
     public Media getById(String id) {
         return mediaRepository.findById(id).orElse(null);
     }
+
     public Media updateMedia(String id, MediaUpdateDTO dto) {
         Optional<Media> optionalMedia = mediaRepository.findById(id);
         if (optionalMedia.isEmpty()) {

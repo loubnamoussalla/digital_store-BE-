@@ -1,4 +1,5 @@
 package com.example.zerodigital.media;
+
 import com.mongodb.lang.NonNull;
 import jakarta.validation.constraints.*;
 
@@ -12,7 +13,8 @@ public class MediaUpdateDTO {
 
     @NotNull
     @Min(1800)
-    @Max(2028)     private int year;
+    @Max(2028)
+    private int year;
 
     @NotBlank(message = "Genre is required")
     private String genre;

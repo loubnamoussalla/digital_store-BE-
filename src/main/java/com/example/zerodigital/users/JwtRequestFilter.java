@@ -22,6 +22,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Autowired
     private JwtUtil jwtUtil;
 
+    //this filter checks if it contains a valid JWT token in the Authorization header
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
@@ -33,14 +34,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             jwt = authHeader.substring(7);
             try {
-                userId = jwtUtil.extractUsername(jwt); // Still technically the "subject", which is the ID
+                userId = jwtUtil.extractUsername(jwt);
             } catch (Exception e) {
                 logger.warn("Unable to extract user ID from JWT", e);
             }
         }
 
         if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            User user = userService.getUserById(userId); // Use new method to fetch by ID
+            User user = userService.getUserById(userId);
 
             if (user != null && jwtUtil.validateToken(jwt, user.getEmail())) {
                 UsernamePasswordAuthenticationToken authToken =

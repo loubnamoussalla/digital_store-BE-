@@ -21,25 +21,27 @@ public class MediaController {
     @Autowired
     private MediaService mediaService;
 
-  @GetMapping("/movies")
+    @GetMapping("/movies")
     public ResponseEntity getAllMovies() {
-      var response = new CustomizedResponse( " A list of all movies ", mediaService.getByType("movie"));
-    return new ResponseEntity(response, HttpStatus.OK);
-  }
-    @GetMapping("/tvshows")
-    public ResponseEntity getAllTVShows() {
-        var response = new CustomizedResponse( " A list of all tvshows ", mediaService.getByType("tvshow"));
+        var response = new CustomizedResponse(" A list of all movies ", mediaService.getByType("movie"));
         return new ResponseEntity(response, HttpStatus.OK);
     }
+
+    @GetMapping("/tvshows")
+    public ResponseEntity getAllTVShows() {
+        var response = new CustomizedResponse(" A list of all tvshows ", mediaService.getByType("tvshow"));
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
+
     @GetMapping("/search/{title}")
     public ResponseEntity getByTitle(@PathVariable("title") String title) {
         List<Media> foundMedia = mediaService.searchByTitle(title);
-        if(foundMedia.isEmpty()){
-            var response = new CustomizedResponse( " No media for title ", Collections.singletonList(title));
+        if (foundMedia.isEmpty()) {
+            var response = new CustomizedResponse(" No media for title ", Collections.singletonList(title));
 
-            return new ResponseEntity(response,HttpStatus.NOT_FOUND);
+            return new ResponseEntity(response, HttpStatus.NOT_FOUND);
         }
-        var response = new CustomizedResponse( " A list of all users ", mediaService.searchByTitle(title));
+        var response = new CustomizedResponse(" A list of all users ", mediaService.searchByTitle(title));
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
@@ -79,7 +81,7 @@ public class MediaController {
     public ResponseEntity<?> updateMedia(
             @PathVariable String id,
             @Valid @RequestBody MediaUpdateDTO dto,
-            BindingResult result
+            BindingResult result // holds the result of the binding and validation process when the request body is converted to a Java object.
     ) {
         if (!ObjectId.isValid(id)) {
             var error = new CustomizedResponse(
@@ -109,17 +111,17 @@ public class MediaController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteMedia(@PathVariable String id) {
-      if (!ObjectId.isValid(id)) {
-          var error = new CustomizedResponse("Invalid media ID format", Collections.singletonList(id));
-          return new ResponseEntity(error, HttpStatus.BAD_REQUEST);
-      }
-      Media media = mediaService.getById(id);
-      if (media == null) {
-          var error = new CustomizedResponse("No media with ID: " + id, Collections.singletonList(id));
-          return new ResponseEntity(error, HttpStatus.NOT_FOUND);
-      }
-      var response = new CustomizedResponse("Media deleted!", Collections.singletonList(mediaService.deleteById(id)));
-      return new ResponseEntity(response, HttpStatus.OK);
+        if (!ObjectId.isValid(id)) {
+            var error = new CustomizedResponse("Invalid media ID format", Collections.singletonList(id));
+            return new ResponseEntity(error, HttpStatus.BAD_REQUEST);
+        }
+        Media media = mediaService.getById(id);
+        if (media == null) {
+            var error = new CustomizedResponse("No media with ID: " + id, Collections.singletonList(id));
+            return new ResponseEntity(error, HttpStatus.NOT_FOUND);
+        }
+        var response = new CustomizedResponse("Media deleted!", Collections.singletonList(mediaService.deleteById(id)));
+        return new ResponseEntity(response, HttpStatus.OK);
     }
 
 }

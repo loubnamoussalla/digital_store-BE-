@@ -26,7 +26,7 @@ import java.util.List;
 public class SecurityConfiguration {
 
     @Autowired
-    private  UserService userService;
+    private UserService userService;
 
     @Autowired
     private AccessDeniedHandle accessDeniedHandle;
@@ -58,7 +58,6 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-//                .addFilterBefore(new CorsFilter(corsSource), AuthorizationFilter.class)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -66,15 +65,12 @@ public class SecurityConfiguration {
 
 
 
-    //     AuthenticationManager replaces configure(AuthenticationManagerBuilder)
-@Bean
-public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-    AuthenticationManagerBuilder auth = http.getSharedObject(AuthenticationManagerBuilder.class);
-    auth.authenticationProvider(authenticationProvider());
-    return auth.build();
-}
-
-
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        AuthenticationManagerBuilder auth = http.getSharedObject(AuthenticationManagerBuilder.class);
+        auth.authenticationProvider(authenticationProvider());
+        return auth.build();
+    }
 
 
     @Bean

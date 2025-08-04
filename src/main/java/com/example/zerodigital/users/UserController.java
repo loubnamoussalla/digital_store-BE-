@@ -48,7 +48,7 @@ public class UserController {
         // Validate firstName and lastName (alphabetical only)
         if (!user.getFirstName().matches("^[a-zA-Z]+$") || !user.getLastName().matches("^[a-zA-Z]+$")) {
             var response = new CustomizedResponse(
-                    "First and Last names must contain only letters (A–Z, a–z)",null );
+                    "First and Last names must contain only letters (A–Z, a–z)", null);
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
@@ -58,11 +58,10 @@ public class UserController {
     }
 
 
-
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable String id) {
 
-        // Validate ObjectId format BEFORE hitting the DB
+        // Validate ObjectId format
         if (!ObjectId.isValid(id)) {
             var response = new CustomizedResponse(
                     "Invalid user ID format",
@@ -82,7 +81,7 @@ public class UserController {
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
-        var response = new CustomizedResponse("User with ID: " + id,Collections.singletonList(user)
+        var response = new CustomizedResponse("User with ID: " + id, Collections.singletonList(user)
         );
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
