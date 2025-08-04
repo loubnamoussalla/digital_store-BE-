@@ -16,7 +16,7 @@ public class CorsConfig {
 
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3000", "https://digital-video-store-omhi.vercel.app"));
+        config.setAllowedOrigins(List.of("http://localhost:3000", "https://digital-video-store-omhi.vercel.app", "http://digital-video-store-omhi.vercel.app"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true); // If using cookies/auth

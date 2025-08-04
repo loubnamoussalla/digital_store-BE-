@@ -45,7 +45,9 @@ public class SecurityConfiguration {
             @Qualifier("customCorsConfig") CorsConfigurationSource corsSource
     ) throws Exception {
 
-        http.csrf(csrf -> csrf.disable())
+        http
+                .cors(cors -> cors.configurationSource(corsSource)).
+                csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth", "/media/**", "/users/register").permitAll()
                         .anyRequest().authenticated()
@@ -56,7 +58,7 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .addFilterBefore(new CorsFilter(corsSource), AuthorizationFilter.class)
+//                .addFilterBefore(new CorsFilter(corsSource), AuthorizationFilter.class)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
